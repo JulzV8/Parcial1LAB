@@ -178,7 +178,7 @@ int main(void) {
 								(utn_getString(bufferTextoDelAviso,sizeof(bufferTextoDelAviso),"Ingrese el texto del aviso.","ERROR: Ingrese un Texto de hasta 64 caracteres.",3))!= -1)
 							{
 								 addPublicacion(arrayPublicaciones,PUBLICACIONES_QTY, bufferIdCliente,bufferNumDeRubro,bufferTextoDelAviso);
-								 arrayClientes[findClientById(arrayClientes,CLIENT_QTY,bufferIdCliente)].cantidadDeAnuncios++;
+								 arrayClientes[findClientById(arrayClientes,CLIENT_QTY,bufferIdCliente)].cantidadDeAnunciosActivos++;
 
 							}
 							else
@@ -193,7 +193,7 @@ int main(void) {
 						{
 							if(pausarPublicacion(arrayPublicaciones,PUBLICACIONES_QTY,bufferIdPublicaciones,&bufferIdCliente)==0)
 							{
-								arrayClientes[findClientById(arrayClientes,CLIENT_QTY,bufferIdCliente)].cantidadDeAnuncios--;
+								arrayClientes[findClientById(arrayClientes,CLIENT_QTY,bufferIdCliente)].cantidadDeAnunciosActivos--;
 							}
 						}
 					break;
@@ -203,7 +203,7 @@ int main(void) {
 						{
 							if(reanudarPublicacion(arrayPublicaciones,PUBLICACIONES_QTY,bufferIdPublicaciones,&bufferIdCliente)==0)
 							{
-								arrayClientes[findClientById(arrayClientes,CLIENT_QTY,bufferIdCliente)].cantidadDeAnuncios++;
+								arrayClientes[findClientById(arrayClientes,CLIENT_QTY,bufferIdCliente)].cantidadDeAnunciosActivos++;
 							}
 						}
 					break;
@@ -221,7 +221,9 @@ int main(void) {
 									"1. Cliente con mas avisos.\n"
 									"2. Cantidad de avisos pausados.\n"
 									"3. Rubro con mas avisos.\n"
-									"4. Volver al menu principal","ERROR: Ingrese un numero del 1 al 4.",1,4,3)==0)
+									"4. Cliente con mas avisos activos.\n"
+									"5. Cliente con mas avisos pausados.\n"
+									"6. Volver al menu principal","ERROR: Ingrese un numero del 1 al 4.",1,6,3)==0)
 						{
 							switch(selection)
 							{
@@ -277,8 +279,38 @@ int main(void) {
 											printf("El rubro con mas publicaciones es: %d\n",maxRubro);
 										}
 									break;
-								//VOLVER AL MENU PRINCIPAL
+
 								case 4:
+									clienteConMasPublicacionesActivas(arrayClientes,CLIENT_QTY);
+									break;
+								case 5:
+									for(int i = 0; i < CLIENT_QTY; i++)
+									{
+										if(i==0 ||(arrayClientes[i].isEmpty == 0 && arrayClientes[i].id != 0))
+										{
+											bufferIdCliente = arrayClientes[i].id;
+											bufferContadorPublicaciones =contarPublicacionesPausadasById(arrayPublicaciones,PUBLICACIONES_QTY,arrayClientes[i].id);
+											if(i ==0 ||numMaximoPublicaciones < bufferContadorPublicaciones)
+											{
+											numMaximoPublicaciones=bufferContadorPublicaciones;
+											idClienteMasPublicaciones = arrayClientes[i].id;
+											}
+										}
+									}
+									if(numMaximoPublicaciones != 0)
+									{
+											printf("El cliente con mas publicaciones pausadas es el siguiente (Con %d publicaciones):\n",numMaximoPublicaciones);
+											printSingleClient(arrayClientes,findClientById(arrayClientes,CLIENT_QTY,idClienteMasPublicaciones));
+
+									}
+									else
+									{
+											printf("No hay publicaciones.\n");
+									}
+									break;
+
+									//VOLVER AL MENU PRINCIPAL
+								case 6:
 									selection = -3;
 									break;
 							}

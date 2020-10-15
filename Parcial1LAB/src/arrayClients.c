@@ -109,7 +109,7 @@ int addClient(Client* list,int len, char* name, char* lastName,char* cuit )
 		strcpy(list[freeIndex].lastName,lastName);
 		strcpy(list[freeIndex].cuit,cuit);
 		list[freeIndex].isEmpty=0;
-		list[freeIndex].cantidadDeAnuncios=0;
+		list[freeIndex].cantidadDeAnunciosActivos=0;
 		printf("Cliente añadido con exito, con un ID asignado de %d.\n",newId);
 		retorno = 0;
 	}
@@ -158,34 +158,34 @@ void altaForzadaCliente(Client* list)
 	strcpy(list[0].lastName,"Vallejos");
 	strcpy(list[0].cuit,"20418932520");
 	list[0].isEmpty=0;
-	list[0].cantidadDeAnuncios=0;
+	list[0].cantidadDeAnunciosActivos=0;
 
 	list[1].id=2;
 	strcpy(list[1].name,"Jose");
 	strcpy(list[1].lastName,"Garcia");
 	strcpy(list[1].cuit,"201234567890");
 	list[1].isEmpty=0;
-	list[1].cantidadDeAnuncios=0;
+	list[1].cantidadDeAnunciosActivos=0;
 
 	list[2].id=3;
 	strcpy(list[2].name,"Pepe");
 	strcpy(list[2].lastName,"Sech");
 	strcpy(list[2].cuit,"148562365412");
 	list[2].isEmpty=0;
-	list[2].cantidadDeAnuncios=0;
+	list[2].cantidadDeAnunciosActivos=0;
 
 	list[3].id=4;
 	strcpy(list[3].name,"Miriam");
 	strcpy(list[3].lastName,"Rodriguez");
 	strcpy(list[3].cuit,"891236549875");
 	list[3].isEmpty=0;
-	list[3].cantidadDeAnuncios=0;
+	list[3].cantidadDeAnunciosActivos=0;
 
 	list[4].id=5;
 	strcpy(list[4].name,"Julio");
 	strcpy(list[4].lastName,"Davides");
 	strcpy(list[4].cuit,"521236859452");
 	list[4].isEmpty=0;
-	list[4].cantidadDeAnuncios=0;
+	list[4].cantidadDeAnunciosActivos=0;
 
 }

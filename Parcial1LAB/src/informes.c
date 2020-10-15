@@ -82,7 +82,7 @@ int printClients(Client* list, int len)
 		{
 			if(list[i].isEmpty == 0)
 			{
-				printf("ID: %d\nNombre: %s\nApellido: %s\nCuit: %s\nCantidad de publicaciones activas: %d\n\n",list[i].id,list[i].name,list[i].lastName,list[i].cuit,list[i].cantidadDeAnuncios);
+				printf("ID: %d\nNombre: %s\nApellido: %s\nCuit: %s\nCantidad de publicaciones activas: %d\n\n",list[i].id,list[i].name,list[i].lastName,list[i].cuit,list[i].cantidadDeAnunciosActivos);
 				allEmpty=0;
 			}
 		}
@@ -102,7 +102,7 @@ int printClients(Client* list, int len)
  */
 void printSingleClient(Client* list, int index)
 {
-	printf("ID: %d\nNombre: %s\nApellido: %s\nCuit: %s\nCantidad de publicaciones activas: %d\n\n",list[index].id,list[index].name,list[index].lastName,list[index].cuit,list[index].cantidadDeAnuncios);
+	printf("ID: %d\nNombre: %s\nApellido: %s\nCuit: %s\nCantidad de publicaciones activas: %d\n\n",list[index].id,list[index].name,list[index].lastName,list[index].cuit,list[index].cantidadDeAnunciosActivos);
 
 }
 
@@ -213,6 +213,25 @@ int contarPublicacionesById(Publicaciones* list, int len, int clientId)
 	return contadorPublicaciones;
 }
 
+
+int contarPublicacionesPausadasById(Publicaciones* list, int len, int clientId)
+{
+	int contadorPublicacionesActivas = 0;
+	if(list != NULL && len > 0)
+	{
+		for(int i=0;i<len;i++)
+		{
+			if(list[i].isEmpty == 0 && list[i].clientId == clientId && list[i].estaPausada == 1)
+			{
+				contadorPublicacionesActivas++;
+			}
+		}
+	}
+	return contadorPublicacionesActivas;
+}
+
+
+
 /**
  *  \brief cuenta cuantas publicaciones tiene un rubro especifico
  *  \param lista de publicaciones
@@ -257,4 +276,39 @@ int contarCantidadClientes(Client* list, int len)
 		}
 	}
 	return cantidadClientes;
+}
+
+int clienteConMasPublicacionesActivas(Client* list, int len)
+{
+	int retornar = -1;
+	int bufferIndex;
+	int contador;
+	if(list != NULL  && len>0)
+	{
+		for(int i = 0; i < len; i++)
+		{
+
+			if(i == 0|| (list[i].isEmpty == 0 && list[i].cantidadDeAnunciosActivos > contador))
+			{
+				bufferIndex = i;
+				contador = list[i].cantidadDeAnunciosActivos;
+
+			}
+		}
+		if(contador != 0)
+		{
+			printf("El cliente con mas avisos activos es el siguiente:\n");
+			printSingleClient(list,bufferIndex);
+		}
+		else
+		{
+			printf("No hay clientes con avisos activos.");
+		}
+		retornar = 0;
+	}
+	if(retornar == -1)
+	{
+		printf("ERROR: No hay ningun espacio vacio!\n");
+	}
+	return retornar;
 }

@@ -21,7 +21,7 @@ typedef struct
 	char lastName[51];
 	char cuit[12];
 	int isEmpty;
-	int cantidadDeAnuncios;
+	int cantidadDeAnunciosActivos;
 }Client;
 
 int initClients(Client* list, int len);
