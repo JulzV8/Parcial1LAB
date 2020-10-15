@@ -20,8 +20,8 @@ int printClients(Client* list, int len);
 void printSingleClient(Client* list,int index);
 int printPublicacionesById(Publicaciones* list, int len, int clientId);
 int cantidadAvisosPausados(Publicaciones* list, int len);
-int contarPublicacionesById(Publicaciones* list, int len, int clientId, int* pContador);
-int contarPublicacionesByRubro(Publicaciones* list, int len, int rubro, int* pContador);
+int contarPublicacionesById(Publicaciones* list, int len, int clientId);
+int contarPublicacionesByRubro(Publicaciones* list, int len, int rubro);
 int contarCantidadClientes(Client* list, int len);
 
 #endif /* INFORMES_H_ */

@@ -25,8 +25,6 @@ int initClients(Client* list, int len)
 		for(int i=0;i<len;i++)
 		{
 			list[i].isEmpty = 1;
-			list[i].cantidadDeAnuncios=0;
-			list[i].id = 0;
 		}
 		retorno = 0;
 	}
@@ -111,6 +109,7 @@ int addClient(Client* list,int len, char* name, char* lastName,char* cuit )
 		strcpy(list[freeIndex].lastName,lastName);
 		strcpy(list[freeIndex].cuit,cuit);
 		list[freeIndex].isEmpty=0;
+		list[freeIndex].cantidadDeAnuncios=0;
 		printf("Cliente añadido con exito, con un ID asignado de %d.\n",newId);
 		retorno = 0;
 	}
@@ -128,21 +127,14 @@ int addClient(Client* list,int len, char* name, char* lastName,char* cuit )
 int removeClient(Client* list, int len, int id)
 {
 	int retornar = -1;
-	int bufferConfirm;
 	int bufferIndex=findClientById(list,len,id);
 	if(list != NULL && len > 0 && id > 0)
 	{
 		if(bufferIndex>-1 && list[bufferIndex].isEmpty==0)
 		{
-			printf("Este es el cliente seleccionado:\n");
-			printSingleClient(list,bufferIndex);
-			utn_getNumero(&bufferConfirm,"Estas seguro que deseas eliminarlo?\nIngrese: 1=SI//0=NO","ERROR. Ingrese 0 o 1.",0,1,3);
-			if(bufferConfirm==1)
-			{
-				list[bufferIndex].isEmpty=1;
-				retornar = 0;
-				printf("Hecho!\n");
-			}
+			list[bufferIndex].isEmpty=1;
+			retornar = 0;
+			printf("Hecho!\n");
 		}
 	}
 	return retornar;
@@ -159,3 +151,41 @@ int generateNewIdClients(void)
     return id;
 }
 
+void altaForzadaCliente(Client* list)
+{
+	list[0].id=1;
+	strcpy(list[0].name,"Julian");
+	strcpy(list[0].lastName,"Vallejos");
+	strcpy(list[0].cuit,"20418932520");
+	list[0].isEmpty=0;
+	list[0].cantidadDeAnuncios=0;
+
+	list[1].id=2;
+	strcpy(list[1].name,"Jose");
+	strcpy(list[1].lastName,"Garcia");
+	strcpy(list[1].cuit,"201234567890");
+	list[1].isEmpty=0;
+	list[1].cantidadDeAnuncios=0;
+
+	list[2].id=3;
+	strcpy(list[2].name,"Pepe");
+	strcpy(list[2].lastName,"Sech");
+	strcpy(list[2].cuit,"148562365412");
+	list[2].isEmpty=0;
+	list[2].cantidadDeAnuncios=0;
+
+	list[3].id=4;
+	strcpy(list[3].name,"Miriam");
+	strcpy(list[3].lastName,"Rodriguez");
+	strcpy(list[3].cuit,"891236549875");
+	list[3].isEmpty=0;
+	list[3].cantidadDeAnuncios=0;
+
+	list[4].id=5;
+	strcpy(list[4].name,"Julio");
+	strcpy(list[4].lastName,"Davides");
+	strcpy(list[4].cuit,"521236859452");
+	list[4].isEmpty=0;
+	list[4].cantidadDeAnuncios=0;
+
+}

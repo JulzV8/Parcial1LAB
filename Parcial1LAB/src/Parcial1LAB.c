@@ -24,24 +24,24 @@ int main(void) {
 	Publicaciones arrayPublicaciones[PUBLICACIONES_QTY];
 	initPublicaciones(arrayPublicaciones,PUBLICACIONES_QTY);
 
+	//altaForzadaCliente(arrayClientes);
+
 	int selection = 0;
 	char bufferName[51];
 	char bufferLastName[51];
-	char bufferCuit[51];
-	char bufferTextoDelAviso[70];
+	char bufferCuit[13];
+	char bufferTextoDelAviso[65];
 	int bufferNumDeRubro;
 	int bufferIdCliente;
 	int bufferIdPublicaciones;
 	int bufferIndex;
 	int bufferIndex2;
-	int bufferClienteConMasPublicaciones;
-	int bufferContadorPublicaciones = 0;
-	int bufferContadorPublicaciones2;
-	int cantidadDeClientes = 0;
-	int bufferRubro;
-	int contadorRubro = 0;
-	int contadorRubro2;
-	int bufferRubroConMasPublicaciones;
+	int idClienteMasPublicaciones;
+	int numMaximoPublicaciones;
+	int bufferContadorPublicaciones;
+	int contadorMaxRubro;
+	int bufferContadorRubro;
+	int maxRubro;
 	printf("Bienvenido!\n");
 
 	//MENU PRINCIPAL
@@ -76,7 +76,7 @@ int main(void) {
 					break;
 			//MODIFICAR CLIENTE
 				case 2:
-					if(utn_getNumero(&bufferIdCliente,"Ingrese el ID del cliente a modificar.","ERROR: Ingrese un numero entero.",0,INT_MAX,3) == 0)
+					if(utn_getNumero(&bufferIdCliente,"Ingrese el ID del cliente a modificar.","ERROR: Ingrese un numero entero.",1,INT_MAX,3) == 0)
 					{
 						bufferIndex = findClientById(arrayClientes,CLIENT_QTY,bufferIdCliente);
 						if(bufferIndex!=-1)
@@ -122,7 +122,7 @@ int main(void) {
 											break;
 										//MODIFICAR CLIENTE SELECCIONADO
 										case 4:
-											utn_getNumero(&bufferIdCliente,"Ingrese el ID del cliente a modificar.","ERROR: Ingrese un numero entero.",0,INT_MAX,3);
+											utn_getNumero(&bufferIdCliente,"Ingrese el ID del cliente a modificar.","ERROR: Ingrese un numero entero.",1,INT_MAX,3);
 											bufferIndex2 = findClientById(arrayClientes,CLIENT_QTY,bufferIdCliente);
 											if(bufferIndex2==-1)
 											{
@@ -151,12 +151,20 @@ int main(void) {
 				//VUELTA AL MENU PRINCIPAL
 				//BORRAR CLIENTE
 				case 3:
-					if(utn_getNumero(&bufferIdCliente,"Ingrese el ID del cliente a borrar","ERROR: Type an integer number.",0,INT_MAX,3) == 0 && findClientById(arrayClientes,CLIENT_QTY,bufferIdCliente)!=-1)
+					if(utn_getNumero(&bufferIdCliente,"Ingrese el ID del cliente a borrar:","ERROR. Ingrese un id valido.",1,INT_MAX,3) == 0 && findClientById(arrayClientes,CLIENT_QTY,bufferIdCliente)!=-1)
 					{
+						printf("Este es el Cliente a borrar:\n");
+						printSingleClient(arrayClientes,findClientById(arrayClientes,CLIENT_QTY,bufferIdCliente));
 						printPublicacionesById(arrayPublicaciones,PUBLICACIONES_QTY,bufferIdCliente);
-						if(removeClient(arrayClientes,CLIENT_QTY,bufferIdCliente)==0)
+						utn_getNumero(&selection,"Seguro desea borrarlo? Ingrese: 1 = SI// 0 = NO","ERROR: Ingrese 0 o 1.",0,1,3);
+						if(selection==1)
 						{
 							erasePublicaciones(arrayPublicaciones,PUBLICACIONES_QTY,bufferIdCliente);
+							removeClient(arrayClientes,CLIENT_QTY,bufferIdCliente);
+						}
+						else
+						{
+							printf("El cliente no se borró.\n");
 						}
 					}
 					break;
@@ -164,7 +172,7 @@ int main(void) {
 				case 4:
 						if(findEmptyIndexPublicaciones(arrayPublicaciones,PUBLICACIONES_QTY,&bufferIndex)!=-1)
 						{
-							if ((utn_getNumero(&bufferIdCliente,"Ingrese el ID del cliente","ERROR: Ingrese un ID valido.",0,CLIENT_QTY,3)) != -1 &&
+							if ((utn_getNumero(&bufferIdCliente,"Ingrese el ID del cliente","ERROR: Ingrese un ID valido.",1,CLIENT_QTY,3)) != -1 &&
 								(findClientById(arrayClientes,CLIENT_QTY,bufferIdCliente)) != -1 &&
 								(utn_getNumero(&bufferNumDeRubro,"Ingrese el numero de rubro","ERROR: Ingrese un numero valido.",1,INT_MAX,3)) != -1 &&
 								(utn_getString(bufferTextoDelAviso,sizeof(bufferTextoDelAviso),"Ingrese el texto del aviso.","ERROR: Ingrese un Texto de hasta 64 caracteres.",3))!= -1)
@@ -181,7 +189,7 @@ int main(void) {
 					break;
 				//PAUSAR PUBLICACION
 				case 5:
-						if(utn_getNumero(&bufferIdPublicaciones,"Ingrese el ID de la publicacion a pausar","ERROR: Ingrese un numero entero valido.",0,INT_MAX,3) == 0)
+						if(utn_getNumero(&bufferIdPublicaciones,"Ingrese el ID de la publicacion a pausar","ERROR: Ingrese un numero entero valido.",1,INT_MAX,3) == 0)
 						{
 							if(pausarPublicacion(arrayPublicaciones,PUBLICACIONES_QTY,bufferIdPublicaciones,&bufferIdCliente)==0)
 							{
@@ -191,7 +199,7 @@ int main(void) {
 					break;
 				//REANUDAR PUBLICACION
 				case 6:
-					if(utn_getNumero(&bufferIdPublicaciones,"Ingrese el ID de la publicacion a renaudar","ERROR: Ingrese un numero entero valido.",0,INT_MAX,3) == 0)
+					if(utn_getNumero(&bufferIdPublicaciones,"Ingrese el ID de la publicacion a renaudar","ERROR: Ingrese un numero entero valido.",1,INT_MAX,3) == 0)
 						{
 							if(reanudarPublicacion(arrayPublicaciones,PUBLICACIONES_QTY,bufferIdPublicaciones,&bufferIdCliente)==0)
 							{
@@ -219,35 +227,28 @@ int main(void) {
 							{
 							//INFORMAR CLIENTE CON MAS AVISOS
 								case 1:
-									bufferIndex2 =contarCantidadClientes(arrayClientes,CLIENT_QTY);
-									while(cantidadDeClientes < bufferIndex2)
+									for(int i = 0; i < CLIENT_QTY; i++)
 									{
-										for(int i = 0; i < CLIENT_QTY; i++)
+										if(i==0 ||(arrayClientes[i].isEmpty == 0 && arrayClientes[i].id != 0))
 										{
-											if(arrayClientes[i].isEmpty == 0 && arrayClientes[i].id != 0)
+											bufferIdCliente = arrayClientes[i].id;
+											bufferContadorPublicaciones =contarPublicacionesById(arrayPublicaciones,PUBLICACIONES_QTY,arrayClientes[i].id);
+											if(i ==0 ||numMaximoPublicaciones < bufferContadorPublicaciones)
 											{
-												bufferIdCliente = arrayClientes[i].id;
-												contarPublicacionesById(arrayPublicaciones,PUBLICACIONES_QTY,bufferIdCliente,&bufferContadorPublicaciones2);
-												if(bufferContadorPublicaciones < bufferContadorPublicaciones2)
-												{
-													bufferContadorPublicaciones=bufferContadorPublicaciones2;
-													bufferClienteConMasPublicaciones = bufferIdCliente;
-												}
-												cantidadDeClientes++;
+												numMaximoPublicaciones=bufferContadorPublicaciones;
+												idClienteMasPublicaciones = arrayClientes[i].id;
 											}
 										}
 									}
-									if(bufferContadorPublicaciones != 0)
+									if(numMaximoPublicaciones != 0)
 									{
 										printf("El cliente con mas publicaciones es:\n");
-										printSingleClient(arrayClientes,findClientById(arrayClientes,CLIENT_QTY,bufferClienteConMasPublicaciones));
+										printSingleClient(arrayClientes,findClientById(arrayClientes,CLIENT_QTY,idClienteMasPublicaciones));
 									}
 									else
 									{
 										printf("No hay publicaciones.\n");
 									}
-									cantidadDeClientes =0;
-									bufferContadorPublicaciones =0;
 									break;
 								//INFORMAR CANTIDAD DE AVISOS PAUSADOS
 								case 2:
@@ -257,27 +258,24 @@ int main(void) {
 								case 3:
 										for(int i = 0; i < PUBLICACIONES_QTY; i++)
 										{
-											if(arrayPublicaciones[i].isEmpty == 0)
+											if(i== 0 || arrayPublicaciones[i].isEmpty == 0)
 											{
-												bufferRubro =arrayPublicaciones[i].numDeRubro;
-												contarPublicacionesByRubro(arrayPublicaciones,PUBLICACIONES_QTY,bufferRubro,&contadorRubro2);
-												if(contadorRubro < contadorRubro2)
+												bufferContadorRubro =contarPublicacionesByRubro(arrayPublicaciones,PUBLICACIONES_QTY,arrayPublicaciones[i].numDeRubro);
+												if(i==0 ||contadorMaxRubro < bufferContadorRubro)
 												{
-													contadorRubro=contadorRubro2;
-													bufferRubroConMasPublicaciones = bufferRubro;
+													contadorMaxRubro=bufferContadorRubro;
+													maxRubro = arrayPublicaciones[i].numDeRubro;
 												}
 											}
 										}
-										if(contadorRubro==0)
+										if(contadorMaxRubro==0)
 										{
 											printf("No hay publicaciones.\n");
 										}
 										else
 										{
-											printf("El rubro con mas publicaciones es: %d\n",bufferRubroConMasPublicaciones);
+											printf("El rubro con mas publicaciones es: %d\n",maxRubro);
 										}
-									contadorRubro2 =0;
-									bufferRubroConMasPublicaciones =0;
 									break;
 								//VOLVER AL MENU PRINCIPAL
 								case 4:

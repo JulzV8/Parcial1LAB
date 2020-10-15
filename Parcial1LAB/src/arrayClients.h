@@ -33,6 +33,7 @@ int EncontrarClienteConMasPublicaciones(Client* list, int len, int* pIndex);
 int removeClient(Client* list, int len, int id);
 int generateNewIdClients(void);
 int orderClientsByLastName(Client* list,int len);
+void altaForzadaCliente(Client* list);
 
 
 #endif /* ARRAYCLIENTS_H_ */

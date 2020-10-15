@@ -26,7 +26,6 @@ int initPublicaciones(Publicaciones* list, int len)
 		for(int i=0;i<len;i++)
 		{
 			list[i].isEmpty = 1;
-			list[i].id = 0;
 		}
 		retorno = 0;
 	}
@@ -217,7 +216,6 @@ int erasePublicaciones(Publicaciones* list, int len, int clientId)
 			if(list[i].isEmpty == 0 && list[i].clientId == clientId)
 			{
 				list[i].isEmpty = 1;
-				list[i].clientId= 0;
 			}
 		}
 	}

@@ -102,7 +102,7 @@ int printClients(Client* list, int len)
  */
 void printSingleClient(Client* list, int index)
 {
-	printf("ID: %d\nNombre: %s\nApellido: %s\nCuit: %s\nCantidad de publicaciones activas: %d\n",list[index].id,list[index].name,list[index].lastName,list[index].cuit,list[index].cantidadDeAnuncios);
+	printf("ID: %d\nNombre: %s\nApellido: %s\nCuit: %s\nCantidad de publicaciones activas: %d\n\n",list[index].id,list[index].name,list[index].lastName,list[index].cuit,list[index].cantidadDeAnuncios);
 
 }
 
@@ -180,7 +180,7 @@ int cantidadAvisosPausados(Publicaciones* list, int len)
 	}
 	if(retornar == -1)
 	{
-		printf("No hay ningun anuncio pausado!\n");
+		printf("No hay ningun anuncio pausado.\n");
 	}
 	else
 	{
@@ -197,9 +197,8 @@ int cantidadAvisosPausados(Publicaciones* list, int len)
  *  \param puntero a una direccion INT donde enviar el resultado
  *  \return 0 exito -1 error
  */
-int contarPublicacionesById(Publicaciones* list, int len, int clientId, int* pContador)
+int contarPublicacionesById(Publicaciones* list, int len, int clientId)
 {
-	int retorno = -1;
 	int contadorPublicaciones = 0;
 	if(list != NULL && len > 0)
 	{
@@ -210,10 +209,8 @@ int contarPublicacionesById(Publicaciones* list, int len, int clientId, int* pCo
 				contadorPublicaciones++;
 			}
 		}
-		*pContador = contadorPublicaciones;
-		retorno = 0;
 	}
-	return retorno;
+	return contadorPublicaciones;
 }
 
 /**
@@ -224,9 +221,8 @@ int contarPublicacionesById(Publicaciones* list, int len, int clientId, int* pCo
  *  \param puntero donde dejar el resultado
  *  \return 0 exito -1 error
  */
-int contarPublicacionesByRubro(Publicaciones* list, int len, int rubro, int* pContador)
+int contarPublicacionesByRubro(Publicaciones* list, int len, int rubro)
 {
-	int retorno = -1;
 	int contadorRubro = 0;
 	if(list != NULL && len > 0)
 	{
@@ -237,10 +233,8 @@ int contarPublicacionesByRubro(Publicaciones* list, int len, int rubro, int* pCo
 				contadorRubro++;
 			}
 		}
-		*pContador = contadorRubro;
-		retorno = 0;
 	}
-	return retorno;
+	return contadorRubro;
 }
 
 /**
